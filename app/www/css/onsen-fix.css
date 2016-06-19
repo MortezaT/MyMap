@@ -1,0 +1,39 @@
+/* region:speed-dial-fab hiding */
+
+.no-fab>ons-fab{
+	visibility: hidden;
+}
+
+.no-fab[direction="left"] {
+	right: -44px;
+}
+
+.no-fab[direction="right"] {
+	left: -44px;
+}
+
+.no-fab[direction="up"] {
+	bottom: -44px;
+}
+
+.no-fab[direction="down"] {
+	top: -44px;
+}
+
+.fab-bottom-toolbar-fix[position*="bottom"] {
+	/*margin-bottom: 44px;*/
+	bottom: 0;
+}
+/* endregion */
+
+.dialog-bottom-toolbar-fix{
+
+}
+
+.dialog-list-height-limit{
+	max-height: 17em;
+}
+
+.bottom-tootlbar-fix{
+
+}

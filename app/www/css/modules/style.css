@@ -1,0 +1,96 @@
+.clearfix {
+	clear: both !important;
+}
+
+/* #region: alignment */
+.pull-right{
+	float: right !important;
+}
+
+.pull-left{
+	float: left !important;
+}
+
+.center-block {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* #region: visiblity */
+
+.show {
+	display: block !important;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.glass{
+	opacity: 0;
+}
+
+.opaque{
+	opacity: 0.4;
+}
+
+/* #endrigion */
+
+.overflow-scroll-y, .overflow-scroll{
+	overflow-y: scroll;
+}
+
+.overflow-scroll-x, .overflow-scroll{
+	overflow-x: scroll;
+}
+
+.overflow-hidden-y, .overflow-hidden{
+	overflow-y: hidden;
+}
+
+.overflow-hidden-x, .overflow-hidden{
+	overflow-x: hidden;
+}
+
+.overflow-visible-y, .overflow-visible{
+	overflow-y: visible;
+}
+
+.overflow-visible-x, .overflow-visible{
+	overflow-x: visible;
+}
+
+.mask{
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	background: transparent;
+	border: none;
+	line-height: normal;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.3);
+}
+
+.fill-parent{
+	width: 100%;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+}

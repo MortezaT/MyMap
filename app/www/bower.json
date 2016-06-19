@@ -1,0 +1,24 @@
+{
+	"name": "my_map",
+	"authors": [
+		"Morteza Tourani <morteza.tourani@gmail.com>"
+	],
+	"description": "my university application",
+	"main": "",
+	"license": "apache 2",
+	"homepage": "",
+	"private": true,
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"vendor",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"angular": "~1",
+		"onsenui": "2.0.0-rc.11",
+		"ngstorage": "~0.3"
+	}
+}
