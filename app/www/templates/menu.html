@@ -1,0 +1,33 @@
+<div ng-controller="MenuCtrl" id="app-menu">
+
+	<!-- TODO: Add app icon to the top of menu -->
+	<ons-row>
+		<ons-col width="10%"></ons-col>
+		<ons-col>
+			<h1> My Map</h1>
+		</ons-col>
+	</ons-row>
+	<ons-list>
+		<ons-list-header>
+			pages
+		</ons-list-header>
+		<ons-list-item
+			modifier="chevron"
+			ng-click="navigateTo(page)"
+			ng-repeat="page in menuRoutes"
+		>
+			<ons-row>
+
+				<ons-col width="2em" class="text-center">
+					<!-- <ons-icon icon="{{ page.icon }}"></ons-icon> -->
+					<i class="{{ page.icon }}"></i>
+				</ons-col>
+
+				<ons-col>
+					{{ page.title }}
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+	</ons-list>
+
+</div>

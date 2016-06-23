@@ -1,0 +1,35 @@
+/* #region: Set map canvas size to full screen ;*/
+#map_canvas{
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+}
+/* #endregion */
+
+/* Portrait layout (default) */
+#about-page {
+	background:url(../img/map.png) no-repeat center top; /* 170px x 200px */
+	position:absolute;			/* position in the center of the screen */
+	left: 50%;
+	top: 40% !important;
+	height: 50px;				/* text area height */
+	width: 225px;				/* text area width */
+	text-align: center;
+	padding: 140px 0px 0px 0px;	/* image height is 200px (bottom 20px are overlapped with text) */
+	margin: -100px 0 0 -112px;
+	/* offset vertical: half of image height and text area height */
+	/* offset horizontal: half of text area width */
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+	#about-page {
+		background-position: left center;
+		padding: 5px 0 150px 150px;	/* padding-top + padding-bottom + text area = image height */
+		margin: -75px 0 0 -200px;	/* offset vertical: half of image height */
+									/* offset horizontal: half of image width and text area width */
+		top: 45%;
+	}
+}

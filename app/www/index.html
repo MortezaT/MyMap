@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html ng-cloak ng-controller="MainCtrl">
+	<head>
+		<!-- #region Metas -->
+
+			<meta charset="utf-8" />
+			<meta name="format-detection" content="telephone=no" />
+			<meta name="msapplication-tap-highlight" content="no" />
+			<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+
+			<!-- <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+		<!-- #endregion -->
+		<!-- #region StyleSheets -->
+
+			<link rel="stylesheet" href="vendor/angular/angular-csp.css">
+
+			<link rel="stylesheet" href="vendor/onsenui/css/onsenui.css">
+			<link rel="stylesheet" href="vendor/onsenui/css/onsen-css-components.css">
+			<link rel="stylesheet" href="vendor/onsenui/css/onsen-css-components-default.css">
+
+			<!-- #region Modules -->
+
+				<link rel="stylesheet" href="css/modules/style.css">
+				<link rel="stylesheet" href="css/modules/text.css">
+				<link rel="stylesheet" href="css/modules/color.css">
+
+			<!-- #endregion -->
+
+			<link rel="stylesheet" href="css/animation.css">
+			<link rel="stylesheet" href="css/onsen-fix.css">
+			<link rel="stylesheet" href="css/app.css">
+		<!-- #endregion -->
+		<title>{{ appName }}</title>
+	</head>
+	<body>
+		<!-- #region Menu -->
+
+			<ons-sliding-menu
+				id="sliding-menu"
+				var="appSys.menu"
+				main-page="templates/map.html"
+				menu-page="templates/menu.html"
+				type="push"
+				side="right"
+				max-slide-distance="18em"
+			></ons-sliding-menu>
+		<!-- #endregion -->
+
+		<!-- #region Scripts -->
+			<script src="cordova.js"></script>
+			<!-- #region Libraries -->
+
+			<script src="vendor/angular/angular.js"></script>
+			<script src="vendor/onsenui/js/onsenui.js"></script>
+			<script src="vendor/onsenui/js/angular-onsenui.js"></script>
+			<script src="vendor/ngstorage/ngStorage.js"></script>
+			<!-- #endregion -->
+
+			<!-- #region Modules -->
+				<script src="js/Module/ObjectHelper.js"></script>
+				<script src="js/Module/Prototype/PrototypeBase.js"></script>
+
+				<script src="js/Module/Prototype/ArrayPrototype.js"></script>
+				<script src="js/Module/Prototype/DatePrototype.js"></script>
+				<script src="js/Module/Prototype/MapSetPrototype.js"></script>
+				<script src="js/Module/Prototype/NumberPrototype.js"></script>
+				<script src="js/Module/Prototype/StringPrototype.js"></script>
+
+				<script src="js/Module/TypeCheck.js"></script>
+			<!-- #endregion -->
+
+			<!-- #region Application scripts -->
+				<!-- #region MT_Component -->
+
+					<script src="js/Module/MT_Component.js"></script>
+				<!-- #endregion -->
+
+				<script src="js/appConfig.js"></script>
+				<script src="js/app.js"></script>
+
+
+				<!-- #region App services -->
+					<script src="js/Service/GoogleMapService.js"></script>
+					<script src="js/Service/CordovaGeolocationService.js"></script>
+				<!-- #endregion -->
+
+				<!-- #region App directives -->
+
+				<!-- #endregion -->
+
+				<!-- #region App controllers -->
+
+					<script src="js/Controller/MainController.js"></script>
+					<script src="js/Controller/MenuController.js"></script>
+					<script src="js/Controller/MapController.js"></script>
+					<script src="js/Controller/PlaceListController.js"></script>
+					<script src="js/Controller/PlaceFormController.js"></script>
+				<!-- #endregion -->
+			<!-- #endregion -->
+		<!-- #endregion -->
+	</body>
+</html>

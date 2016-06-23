@@ -1,0 +1,33 @@
+<ons-navigator animation="slide" var="appSys.nav">
+	<ons-page ng-controller="PlaceListCtrl">
+		<ons-toolbar>
+			<ons-toolbar-button
+				class="right"
+				ng-click="appSys.menu.toggleMenu()">
+				<ons-icon icon="ion-navicon"></ons-icon>
+			</ons-toolbar-button>
+			<div class="center">Manage places</div>
+		</ons-toolbar>
+
+		<h3>My places</h3>
+		<ons-list>
+			<ons-list-item
+				ng-repeat="place in myPlaces"
+				ng-click="show(place)"
+			>
+				<ons-row>
+					<ons-col width="15%" class="text-center">
+						<i class="{{ place.type.icon }}"></i>
+					</ons-col>
+					<ons-col>
+						{{ place.title }}
+					</ons-col>
+					<ons-col width="10%">
+						{{ place.badge }}
+					</ons-col>
+				</ons-row>
+			</ons-list-item>
+		</ons-list>
+
+	</ons-page>
+</ons-navigator>

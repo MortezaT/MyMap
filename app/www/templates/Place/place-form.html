@@ -1,0 +1,105 @@
+<ons-page ng-controller="PlaceFormCtrl">
+	<ons-toolbar>
+		<div class="left">
+			<ons-back-button>Back</ons-back-button>
+		</div>
+		<div class="center"><i class="{{ shadow.type.icon }}"></i> {{ shadow.title }}</div>
+	</ons-toolbar>
+	<ons-list>
+
+		<ons-list-header dir="auto" ng-show="canEdit()">
+			{{ action | titlecase }}
+		</ons-list-header>
+
+		<ons-list-item>
+			<ons-col width="30%">Title</ons-col>
+			<ons-col>
+				<span ng-hide="canEdit()">{{ shadow.title }}</span>
+				<ons-input
+					modifier="material"
+					type="text"
+					placeholder="Title"
+
+					ng-show="canEdit()"
+					ng-model="shadow.title"
+				></ons-input>
+			</ons-col>
+			<ons-col width="2%"></ons-col>
+			<ons-col width="8%" class="text-center" style="position: relative;">
+				<i class="{{ shadow.type.icon }}"></i>
+				<ons-icon ng-show="canEdit()" icon="fa-caret-down" size="lg"></ons-icon>
+				<select ng-show="canEdit()" class="fill-parent glass" name="dropdown-test" id="dropdown-test" ng-model="shadow.type" ng-options="type2.name for type2 in type.items"></select>
+			</ons-col>
+			<ons-col width="10%"></ons-col>
+		</ons-list-item>
+
+		<!-- <ons-list-item>
+			<ons-col width="30%">Type</ons-col>
+			<ons-col width="2%"></ons-col>
+			<ons-col width="8%">
+				<i class="{{ shadow.type.icon }}"></i>
+			</ons-col>
+			<ons-col>
+				{{ shadow.type.name }}
+			</ons-col>
+			<ons-col width="10%" class="text-center" ng-show="canEdit()">
+				<place-type-dropdown ng-show="canEdit()" selected="shadow.type" opener-template="placeType.openerTemplate" items="placeType.items" height-limit="placeType.heightLimit" parent-element="placeType.dialogParent"></place-type-dropdown>
+			</ons-col>
+			<ons-col width="5%"></ons-col>
+		</ons-list-item> -->
+
+		<ons-list-item>
+			<ons-col width="30%">Address</ons-col>
+			<ons-col width="70%">
+				<span ng-hide="canEdit()">{{ shadow.address }}</span>
+				<ons-input
+					modifier="material"
+					type="text"
+					placeholder="Title"
+
+					ng-show="canEdit()"
+					ng-model="shadow.address"
+				></ons-input>
+			</ons-col>
+		</ons-list-item>
+
+		<ons-list-item>
+			<ons-col width="30%">Date</ons-col>
+			<ons-col width="70%">
+				<span ng-hide="canEdit()">{{ shadow.date | date }}</span>
+				<ons-input
+					modifier="material"
+					type="date"
+					placeholder="Date"
+
+					ng-show="canEdit()"
+					ng-model="shadow.date"
+				></ons-input>
+			</ons-col>
+		</ons-list-item>
+	</ons-list>
+
+	<ons-fab ng-click="edit()" ng-hide="canEdit()" position="bottom right" ripple>
+		<ons-icon icon="ion-edit"></ons-icon>
+	</ons-fab>
+
+	<ons-bottom-toolbar ng-show="canEdit()">
+
+		<ons-row class="bottom-bar__line-height">
+			<ons-col width="4%"></ons-col>
+			<ons-col width="16%" class="text-center">
+				<ons-toolbar-button class="text-danger" ng-click="cancel()">
+					<ons-icon icon="ion-android-close"></ons-icon>
+				</ons-toolbar-button>
+			</ons-col>
+			<ons-col></ons-col>
+			<ons-col width="16%" class="text-center">
+				<ons-toolbar-button class="text-success" ng-click="save()">
+					<ons-icon icon="ion-android-done"></ons-icon>
+				</ons-toolbar-button>
+			</ons-col>
+			<ons-col width="4%"></ons-col>
+		</ons-row>
+	</ons-bottom-toolbar>
+
+</ons-page>
