@@ -110,7 +110,7 @@
 			};
 
 			svc.showMarkerInfo = marker => {
-				if(marker.get('title'))
+				if (marker.get('title'))
 					marker.showInfoWindow();
 			};
 			// #endregion
@@ -229,7 +229,7 @@
 
 			// #region Map initiation
 
-			svc.init = function (div, options) {
+			svc.init = function (div, options, freshMap = false) {
 				if (mapInitiationLock)
 					return;
 
@@ -238,7 +238,7 @@
 
 				svc.plugin = svc.plugin || plugin.google.maps;
 
-				if (svc.map) {
+				if (svc.map && freshMap) {
 					svc.map.clear();
 					svc.map.remove();
 					$document.find('.gmap_div:not(:last)').remove();
