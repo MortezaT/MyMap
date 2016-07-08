@@ -1,11 +1,15 @@
 (function () {
 	var app = angular.module(appName);
+	var defaultPlace = {
+		title: '',
+		address: '',
+	};
 
-	app.controller('PlaceFormCtrl', ['$scope', '$element', '$localStorage',
-		function ($scope, $element, $localStorage) {
+	app.controller('PlaceFormCtrl', ['$scope', '$element', '$localStorage', 'googleMapService',
+		function ($scope, $element, $localStorage, mapService) {
 			$scope.$storage = $localStorage;
 
-			var options = $scope.appSys.nav.topPage.pushedOptions;
+			var options = appSys.nav.topPage.pushedOptions;
 			var actions = appSys.config.actions;
 
 			$scope.placeType = {
@@ -19,11 +23,22 @@
 				items: $scope._placeTypes,
 			};
 
-			$scope.place = options.place;
-
-			$scope.shadow = angular.copy($scope.place);
+			$scope.defaultIcon = 'zmdi zmdi-pin';
 
 			$scope.action = options.action;
+
+			$scope.place = options.place;
+
+			$scope.shadow = ($scope.action === actions.NEW) ?
+				Object.assign({}, defaultPlace, $scope.place) :
+				angular.copy($scope.place);
+
+			$scope.getAddress = () => {
+				console.info($scope.shadow.latLng);
+				if (confirm('Do you want to get address from google services?'))
+					mapService.getAddress($scope.place.latLng)
+					.then(address => $scope.shadow.address = address.extra.lines);
+			};
 
 			$scope.canEdit = () => $scope.action !== actions.VIEW;
 
@@ -32,16 +47,18 @@
 			};
 
 			$scope.cancel = () => {
+				if ($scope.action === actions.NEW && appSys.nav.pages.length > 1)
+					$scope.appSys.nav.popPage();
 				$scope.action = actions.VIEW;
 				$scope.shadow = angular.copy($scope.place);
 			};
 
 			$scope.save = () => {
 				var cloned = angular.copy($scope.shadow);
-				$scope.action = actions.VIEW;
-
-				if($scope.action === actions.NEW)
+				if ($scope.action === actions.NEW)
 					$scope.$storage.places.push(cloned);
+
+				$scope.action = actions.VIEW;
 				Object.assign($scope.place, cloned);
 			};
 

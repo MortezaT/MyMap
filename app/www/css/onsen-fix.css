@@ -20,9 +20,15 @@
 	top: -44px;
 }
 
-.fab-bottom-toolbar-fix[position*="bottom"] {
+.fab-bottom-toolbar-fix[position*="bottom"][direction="up"] {
 	/*margin-bottom: 44px;*/
 	bottom: 0;
+}
+
+.fab-bottom-toolbar-fix[position*="bottom"][direction="left"],
+.fab-bottom-toolbar-fix[position*="bottom"][direction="right"] {
+	/*margin-bottom: 44px;*/
+	bottom: 44px;
 }
 /* endregion */
 

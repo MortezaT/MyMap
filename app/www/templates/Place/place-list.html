@@ -13,9 +13,14 @@
 		<ons-list>
 			<ons-list-item
 				ng-repeat="place in myPlaces"
-				ng-click="show(place)"
+				ng-click="pressed(place, $index)"
+				on-long-press="longPressed($index)"
 			>
 				<ons-row>
+					<ons-col width="4px"></ons-col>
+					<ons-col width="44px" class="text-center" ng-show="isManageMode()">
+						<ons-input type="checkbox" ng-model="selectedItems[$index]"></ons-input>
+					</ons-col>
 					<ons-col width="15%" class="text-center">
 						<i class="{{ place.type.icon }}"></i>
 					</ons-col>
@@ -29,5 +34,24 @@
 			</ons-list-item>
 		</ons-list>
 
+		<ons-bottom-toolbar ng-show="isManageMode()">
+
+			<ons-row class="bottom-bar__line-height">
+				<ons-col width="1px"></ons-col>
+				<ons-col></ons-col>
+				<ons-col width="1px" class="item-primary"></ons-col>
+				<ons-col width="44px" class="text-center text-danger"  ng-click="deleteSelected()">
+					<i class="zmdi zmdi-hc-lg zmdi-delete"></i>
+				</ons-col>
+				<ons-col width="1px" class="item-primary"></ons-col>
+				<ons-col width="44px" class="text-center"  ng-click="selectAll()" ng-hide="isAllSelected()">
+					<i class="zmdi zmdi-hc-lg zmdi-select-all"></i>
+				</ons-col>
+				<ons-col width="44px" class="text-center"  ng-click="deselectAll()" ng-show="isAllSelected()">
+					<i class="zmdi zmdi-hc-lg zmdi-close-circle-o"></i>
+				</ons-col>
+				<ons-col width="1px" class="item-primary"></ons-col>
+			</ons-row>
+		</ons-bottom-toolbar>
 	</ons-page>
 </ons-navigator>

@@ -3,7 +3,11 @@
 
 	app.factory('googleMapService', ['$q', '$document', '$timeout',
 		function ($q, $document, $timeout) {
-			var svc = {};
+			var svc = {
+				isMapReady: false,
+				initiationLock: false,
+				mapStatus: ''
+			};
 
 			function _getOptions(options) {
 				// TODO: Map options must be memorized upon to user change.
@@ -15,9 +19,9 @@
 					mapType: svc.plugin.MapTypeId.HYBRID,
 					controls: {
 						compass: true,
-						// myLocationButton: true,
+						myLocationButton: true,
 						indoorPicker: true,
-						// zoom: true
+						zoom: true
 					},
 					gestures: {
 						scroll: true,
@@ -36,21 +40,18 @@
 				return Object.assign({}, _getOptions.defaults, options);
 			}
 
-			var isMapReady = false;
-			var mapInitiationLock = false;
-
 			// #region Other methods
 
 			// returns deferred which will resolve when map is ready.
 			svc.waitTillReady = function () {
-				if (isMapReady)
+				if (svc.isMapReady)
 					return $q.resolve();
-				if (!mapInitiationLock)
+				if (!svc.initiationLock)
 					svc.init();
 
 				var deferred = $q.defer();
 				(function _resolveOnMapReady() {
-					if (isMapReady)
+					if (svc.isMapReady)
 						return deferred.resolve();
 					plugins.toast.showShortTop('Wait for google map.');
 					$timeout(_resolveOnMapReady, 1000);
@@ -59,10 +60,102 @@
 			};
 
 			svc.setCenter = function (latLng) {
-				svc.map.moveCamera({
+				svc.map.animateCamera({
 					"target": latLng,
 					"zoom": 18
 				});
+			};
+
+			svc.current = function (accurate = true) {
+				if (this.deferred)
+					return this.deferred.promise;
+				console.info('Get current location');
+
+				this.deferred = $q.defer();
+				var options = {
+					enableHighAccuracy: accurate
+				};
+				svc.map.getMyLocation(options,
+					result => this.deferred.resolve(result),
+					error => this.deferred.reject(error)
+				);
+				this.deferred.promise.finally(() => this.deferred = null);
+				return this.deferred.promise;
+			};
+
+			// #region Track
+			// track just checks if current location is available. and changes check period against availablity.
+			svc.track = function () {
+				var tracker = svc.track;
+				if (tracker.tracking)
+					return;
+				tracker.tracking = $q.defer();
+				tracker.tracking.promise.finally(() => tracker.tracking = null);
+
+				tracker.timeout = tracker.time.normal;
+				(function _track() {
+					if (!tracker.tracking)
+						return;
+					$timeout(_track, tracker.timeout);
+					if (_track.tracking)
+						return;
+					_track.tracking = true;
+					svc.current()
+						.then(() => {
+							tracker.timeout = tracker.time.lazy;
+							svc.online = true;
+						})
+						.catch(() => {
+							tracker.timeout = tracker.time.fast;
+							svc.online = false;
+						})
+						.finally(() => _track.tracking = false);
+				})();
+				return tracker.tracking.promise;
+			};
+
+			svc.track.time = {
+				time: 1000, // 1 second
+				fast: 300, // 0.3 second
+				lazy: 3000, // 3 seconds
+			};
+
+			svc.track.stop = function () {
+				if (svc.track.tracking)
+					svc.track.tracking.reject();
+			};
+
+			// #endregion
+
+			svc.tryCurrent = function (retries = 3, accurate = true) {
+				var deferred = $q.defer();
+				var resolved = false;
+				var retry = true;
+
+				(function _resolveOnLocationFound() {
+					if (resolved)
+						return;
+					if (retry && retries) {
+						retry = false;
+						svc.current()
+							.then(
+								result => {
+									resolved = true;
+									deferred.resolve(result);
+								},
+								error => {
+									retry = !!(--retries);
+									if (!retry)
+										deferred.reject(error);
+
+									console.warn(`Retry ${retries} after error ${error.error_code}\t${error.error_message}`);
+									$timeout(_resolveOnLocationFound, 1000);
+								}
+						);
+					}
+				})();
+
+				return deferred.promise;
 			};
 
 			// #region Marker
@@ -230,11 +323,12 @@
 			// #region Map initiation
 
 			svc.init = function (div, options, freshMap = false) {
-				if (mapInitiationLock)
+				console.info('Initializing google map service...');
+				if (svc.initiationLock)
 					return;
 
-				isMapReady = false;
-				mapInitiationLock = true;
+				svc.isMapReady = false;
+				svc.initiationLock = true;
 
 				svc.plugin = svc.plugin || plugin.google.maps;
 
@@ -256,8 +350,8 @@
 				svc.map.addEventListener(svc.plugin.event.MAP_READY,
 					function () {
 
-						isMapReady = true;
-						mapInitiationLock = false;
+						svc.isMapReady = true;
+						svc.initiationLock = false;
 					}
 				);
 			};

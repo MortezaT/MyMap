@@ -1,52 +1,64 @@
-<ons-page ng-controller="MapCtrl">
-	<ons-toolbar>
-		<div class="center">My Map</div>
-		<ons-toolbar-button
-			class="right"
-			ng-click="appSys.menu.toggleMenu()">
-			<ons-icon icon="ion-navicon"></ons-icon>
-		</ons-toolbar-button>
-	</ons-toolbar>
+<ons-navigator animation="slide" var="appSys.nav">
+	<ons-page ng-controller="MapCtrl">
+		<ons-toolbar>
+			<div class="center">My Map</div>
+			<ons-toolbar-button
+				class="right"
+				ng-click="appSys.menu.toggleMenu()">
+				<ons-icon icon="ion-navicon"></ons-icon>
+			</ons-toolbar-button>
+		</ons-toolbar>
 
-	<div id="map_canvas">
-		<ons-speed-dial id="map-dial"
-			class="fab-bottom-toolbar-fix no-fab"
-			position="bottom right" direction="up"
-		>
-			<ons-fab id="map-dial-fab">
-				<i class="{{ viewType.icon || mapType.satellite.icon }}"></i>
-			</ons-fab>
-			<ons-speed-dial-item ng-click="setType(mapType.satellite)">
-				<i class="{{ mapType.satellite.icon }}"></i>
-			</ons-speed-dial-item>
-			<ons-speed-dial-item ng-click="setType(mapType.hybrid)">
-				<i class="{{ mapType.hybrid.icon }}"></i>
-			</ons-speed-dial-item>
-			<ons-speed-dial-item ng-click="setType(mapType.roadMap)">
-				<i class="{{ mapType.roadMap.icon }}"></i>
-			</ons-speed-dial-item>
-			<ons-speed-dial-item ng-click="setType(mapType.terrain)">
-				<i class="{{ mapType.terrain.icon }}"></i>
-			</ons-speed-dial-item>
-		</ons-speed-dial>
-	</div>
+		<div id="map_canvas">
+			<ons-speed-dial id="map-dial"
+				class="fab-bottom-toolbar-fix no-fab"
+				position="bottom left" direction="right"
+			>
+				<ons-fab id="map-dial-fab">
+					<i class="{{ viewType.icon }}"></i>
+				</ons-fab>
+				<ons-speed-dial-item ng-click="setType(mapType.enum.satellite)">
+					<i class="{{ mapType.enum.satellite.icon }}"></i>
+				</ons-speed-dial-item>
+				<ons-speed-dial-item ng-click="setType(mapType.enum.hybrid)">
+					<i class="{{ mapType.enum.hybrid.icon }}"></i>
+				</ons-speed-dial-item>
+				<ons-speed-dial-item ng-click="setType(mapType.enum.roadMap)">
+					<i class="{{ mapType.enum.roadMap.icon }}"></i>
+				</ons-speed-dial-item>
+				<ons-speed-dial-item ng-click="setType(mapType.enum.terrain)">
+					<i class="{{ mapType.enum.terrain.icon }}"></i>
+				</ons-speed-dial-item>
+			</ons-speed-dial>
+		</div>
 
-	<ons-bottom-toolbar class="bottom-bar__line-height">
-		<ons-row style="position: fixed; bottom: 0;">
-			<ons-col width="2%"></ons-col>
-			<ons-col width="10%"></ons-col>
-			<ons-col width="2%"></ons-col>
-			<ons-col class="text-center text-info blink">{{ status }}</ons-col>
-			<ons-col ng-show="canManageMarker()" width="10%"></ons-col>
-			<ons-col ng-show="showExtraButtons()" width="10%"></ons-col>
-			<ons-col width="2%"></ons-col>
-			<ons-col width="" ng-class="{'text-warning': typeChange, 'text-success': !typeChange }" class="text-right pull-right">
-				<i id="fab-button"
-				class="{{ viewType.icon || mapType.satellite.icon }} fa-lg"
-				ng-click="toggleSpeedDial()"
-				></i>
-			</ons-col>
-			<ons-col width="2%"></ons-col>
-		</ons-row>
-	</ons-bottom-toolbar>
-</ons-page>
+		<ons-bottom-toolbar class="bottom-bar__line-height">
+
+			<ons-row>
+				<ons-col width="4px" class=""></ons-col>
+				<ons-col width="10%" class="text-center" ng-class="getBtnStatusClass(mapType.isOpen)" ng-click="mapType.toggle()">
+					<i class="{{ config.mapType.icon }}"></i>
+				</ons-col>
+				<ons-col width="4px" class=""></ons-col>
+				<ons-col width="10%" class="text-center" ng-class="getBtnStatusClass(traffic())" ng-click="toggleTraffic()">
+					<i class="zmdi zmdi-traffic"></i>
+				</ons-col>
+				<ons-col width="4px" class=""></ons-col>
+				<ons-col class="text-overflow-elipsis overflow-hidden" ng-class="infoCellClass()">Long Status text to check the result</ons-col>
+				<ons-col width="4px" class=""></ons-col>
+				<ons-col width="10%" class="text-center" ng-click="current()">
+					<i class="text-info fa fa-map-signs"></i>
+				</ons-col>
+				<ons-col width="4px" class=""></ons-col>
+				<ons-col width="10%" class="text-center" ng-show="hasNewMarker()" ng-click="add()">
+					<i class="text-info fa fa-plus"></i>
+				</ons-col>
+				<ons-col width="4px" class=""></ons-col>
+				<!-- <ons-col width="10%" class="text-center" ng-class="getBtnStatusClass(watching)" ng-click="toggleWatch()">
+					<i class="" ng-class="getGpsStatusIcon()"></i>
+				</ons-col>
+				<ons-col width="4px" class=""></ons-col> -->
+			</ons-row>
+		</ons-bottom-toolbar>
+	</ons-page>
+</ons-navigator>

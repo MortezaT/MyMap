@@ -5,77 +5,109 @@
 		</div>
 		<div class="center"><i class="{{ shadow.type.icon }}"></i> {{ shadow.title }}</div>
 	</ons-toolbar>
-	<ons-list>
+
+	<ons-list modifier="inset noborder" ng-show="canEdit()">
+		<ons-list-header dir="auto" ng-show="canEdit()">
+			{{ action | titlecase }}
+		</ons-list-header>
+		<ons-list-item modifier="nodivider">
+			<ons-row>
+				<ons-col width="20%" style="position: relative;">
+					<i class="zmdi-hc-2x zmdi-hc-border {{shadow.type.icon || defaultIcon}}"></i>
+					<!-- <ons-icon icon="fa-caret-down" size="lg"></ons-icon> -->
+					<select class="fill-parent glass" name="dropdown-test" id="dropdown-test" ng-model="shadow.type" ng-options="type2.name for type2 in type.items"></select>
+				</ons-col>
+				<ons-col>
+					<ons-input ng-model="shadow.title" placeholder="Title" modifier="material" float></ons-input>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+
+		<ons-list-item modifier="nodivider">
+			<ons-col width="44px" class="text-center">
+				<i class="ion-pin zmdi-hc-2x"></i>
+			</ons-col>
+			<ons-col width="2%"></ons-col>
+			<ons-col>
+				<ons-row>
+					<div dir="auto" class="text-justified">Latitude {{ shadow.latLng.lat | number : 3 }}</div>
+				</ons-row>
+				<ons-row>
+					<div dir="auto" class="text-justified">Longitude {{ shadow.latLng.lng | number : 3 }}</div>
+				</ons-row>
+			</ons-col>
+			<ons-col width="1em"></ons-col>
+			<!--
+			<ons-col width="3em" class="text-center" ng-click="showOnMap()">
+				<i class="zmdi-hc-2x zmdi zmdi-map"></i>
+			</ons-col>
+			-->
+			<ons-col width="1em"></ons-col>
+		</ons-list-item>
+
+		<ons-list-item modifier="nodivider">
+			<ons-col>
+				<textarea
+					class="textarea textarea--transparent"
+					modifier="material"
+					placeholder="Address"
+					float
+
+					ng-model="shadow.address"
+				></textarea>
+			</ons-col>
+			<ons-col width="44px" ng-click="getAddress()">
+				<i class="zmdi zmdi-hc-2x zmdi-label"></i>
+			</ons-col>
+		</ons-list-item>
+		<ons-list-item modifier="nodivider"></ons-list-item>
+	</ons-list>
+
+	<ons-list ng-hide="canEdit()">
 
 		<ons-list-header dir="auto" ng-show="canEdit()">
 			{{ action | titlecase }}
 		</ons-list-header>
 
-		<ons-list-item>
-			<ons-col width="30%">Title</ons-col>
-			<ons-col>
-				<span ng-hide="canEdit()">{{ shadow.title }}</span>
-				<ons-input
-					modifier="material"
-					type="text"
-					placeholder="Title"
-
-					ng-show="canEdit()"
-					ng-model="shadow.title"
-				></ons-input>
+		<ons-list-item modifier="nodivider">
+			<ons-col width="44px" class="text-center">
+				<i class="zmdi-hc-2x {{shadow.type.icon || defaultIcon}}"></i>
 			</ons-col>
 			<ons-col width="2%"></ons-col>
-			<ons-col width="8%" class="text-center" style="position: relative;">
-				<i class="{{ shadow.type.icon }}"></i>
-				<ons-icon ng-show="canEdit()" icon="fa-caret-down" size="lg"></ons-icon>
-				<select ng-show="canEdit()" class="fill-parent glass" name="dropdown-test" id="dropdown-test" ng-model="shadow.type" ng-options="type2.name for type2 in type.items"></select>
+			<ons-col>
+				<div dir="auto" class="text-justified">{{ shadow.title }}</div>
 			</ons-col>
 			<ons-col width="10%"></ons-col>
 		</ons-list-item>
 
-		<!-- <ons-list-item>
-			<ons-col width="30%">Type</ons-col>
+		<ons-list-item modifier="nodivider">
+			<ons-col width="44px" class="text-center">
+				<i class="fa fa-map-signs fa-2x"></i>
+			</ons-col>
 			<ons-col width="2%"></ons-col>
-			<ons-col width="8%">
-				<i class="{{ shadow.type.icon }}"></i>
-			</ons-col>
 			<ons-col>
-				{{ shadow.type.name }}
+				<div dir="auto" class="break-word text-justified">{{ shadow.address }}</div>
 			</ons-col>
-			<ons-col width="10%" class="text-center" ng-show="canEdit()">
-				<place-type-dropdown ng-show="canEdit()" selected="shadow.type" opener-template="placeType.openerTemplate" items="placeType.items" height-limit="placeType.heightLimit" parent-element="placeType.dialogParent"></place-type-dropdown>
-			</ons-col>
-			<ons-col width="5%"></ons-col>
-		</ons-list-item> -->
-
-		<ons-list-item>
-			<ons-col width="30%">Address</ons-col>
-			<ons-col width="70%">
-				<span ng-hide="canEdit()">{{ shadow.address }}</span>
-				<ons-input
-					modifier="material"
-					type="text"
-					placeholder="Title"
-
-					ng-show="canEdit()"
-					ng-model="shadow.address"
-				></ons-input>
-			</ons-col>
+			<ons-col width="10%"></ons-col>
 		</ons-list-item>
 
-		<ons-list-item>
-			<ons-col width="30%">Date</ons-col>
-			<ons-col width="70%">
-				<span ng-hide="canEdit()">{{ shadow.date | date }}</span>
-				<ons-input
-					modifier="material"
-					type="date"
-					placeholder="Date"
-
-					ng-show="canEdit()"
-					ng-model="shadow.date"
-				></ons-input>
+		<ons-list-item modifier="nodivider">
+			<ons-col width="44px" class="text-center">
+				<i class="ion-pin zmdi-hc-2x"></i>
 			</ons-col>
+			<ons-col width="2%"></ons-col>
+			<ons-col>
+				<div dir="auto" class="text-justified">{{ shadow.latLng.lat }}</div>
+			</ons-col>
+			<ons-col>
+				<div dir="auto" class="text-justified">{{ shadow.latLng.long }}</div>
+			</ons-col>
+			<ons-col width="1em"></ons-col>
+			<ons-col width="3em" class="text-center" ng-click="showOnMap()">
+				<i class="zmdi-hc-2x zmdi zmdi-map"></i>
+				<!-- <i class="zmdi-hc-2x zmdi zmdi-google-maps"></i> -->
+			</ons-col>
+			<ons-col width="1em"></ons-col>
 		</ons-list-item>
 	</ons-list>
 
@@ -86,19 +118,15 @@
 	<ons-bottom-toolbar ng-show="canEdit()">
 
 		<ons-row class="bottom-bar__line-height">
-			<ons-col width="4%"></ons-col>
-			<ons-col width="16%" class="text-center">
-				<ons-toolbar-button class="text-danger" ng-click="cancel()">
-					<ons-icon icon="ion-android-close"></ons-icon>
-				</ons-toolbar-button>
+			<ons-col width="1px" class="item-primary"></ons-col>
+			<ons-col class="text-center text-danger frame-danger-light"  ng-click="cancel()">
+				<i class="zmdi-hc-lg ion-android-close"></i>
 			</ons-col>
-			<ons-col></ons-col>
-			<ons-col width="16%" class="text-center">
-				<ons-toolbar-button class="text-success" ng-click="save()">
-					<ons-icon icon="ion-android-done"></ons-icon>
-				</ons-toolbar-button>
+			<ons-col width="1px" class="item-primary"></ons-col>
+			<ons-col class="text-center item-success-click frame-success-light" ng-click="save()">
+				<i class="ion-android-done"></i>
 			</ons-col>
-			<ons-col width="4%"></ons-col>
+			<ons-col width="1px" class="item-primary"></ons-col>
 		</ons-row>
 	</ons-bottom-toolbar>
 

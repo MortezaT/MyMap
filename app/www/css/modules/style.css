@@ -65,6 +65,22 @@
 	overflow-x: visible;
 }
 
+.overflow-overlay-y, .overflow-overlay{
+	overflow-y: overlay;
+}
+
+.overflow-overlay-x, .overflow-overlay{
+	overflow-x: overlay;
+}
+
+.text-overflow-elipsis{
+	text-overflow: ellipsis;
+}
+
+.text-overflow-clip{
+	text-overflow: clip;
+}
+
 .mask{
 	padding: 0;
 	margin: 0;
