@@ -33,22 +33,20 @@
 				Object.assign({}, defaultPlace, $scope.place) :
 				angular.copy($scope.place);
 
+			$scope.canEdit = () => $scope.action !== actions.VIEW;
+
+			$scope.edit = () => $scope.action = actions.EDIT;
+
 			$scope.getAddress = () => {
 				console.info($scope.shadow.latLng);
 				if (confirm('Do you want to get address from google services?'))
 					mapService.getAddress($scope.place.latLng)
-					.then(address => $scope.shadow.address = address.extra.lines);
-			};
-
-			$scope.canEdit = () => $scope.action !== actions.VIEW;
-
-			$scope.edit = () => {
-				$scope.action = actions.EDIT;
+					.then(address => $scope.shadow.address = address.extra.lines.join(', '));
 			};
 
 			$scope.cancel = () => {
-				if ($scope.action === actions.NEW && appSys.nav.pages.length > 1)
-					$scope.appSys.nav.popPage();
+				if ($scope.action === actions.NEW)
+					appSys.nav.popPage();
 				$scope.action = actions.VIEW;
 				$scope.shadow = angular.copy($scope.place);
 			};
@@ -62,9 +60,12 @@
 				Object.assign($scope.place, cloned);
 			};
 
-			// #region Place type
-
-			// #endregion
+			$scope.showOnMap = () => {
+				appSys.nav.pushPage('templates/map.html', {
+					animation: "slide",
+					place: $scope.place.latLng,
+				});
+			};
 		}
 	]);
 })();

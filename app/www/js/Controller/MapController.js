@@ -40,8 +40,32 @@
 					},
 				}
 			};
+
 			$scope.config = $localStorage.mapConfig;
+			$scope.appConfig = $localStorage.appConfig;
 			$scope.markers = [];
+			var options = appSys.nav ? appSys.nav.topPage.pushedOptions : {};
+			$scope.center = options.center;
+
+			$scope.hasMarker = () => !!$scope.markers.length;
+
+			$scope.hasMultiMurkers = () => $scope.markers.length > 1;
+
+			$scope.hasNewMarker = () => !!$scope.newMarker;
+
+			$scope.infoCellClass = () => 'text-info blink';
+
+			$scope.add = () => $scope.newMarker && $scope.newMarker.getPosition(_add);
+
+			$scope.getBtnStatusClass = active => active ? 'item-primary' : 'text-info';
+
+			$scope.getGpsStatusIcon = () => {
+				// For sure if it's tracking.
+				geoService.track();
+				if (!$scope.watching)
+					return 'zmdi zmdi-gps';
+				return 'zmdi zmdi-gps-dot' + (geoService.online ? '' : ' blink text-warning');
+			};
 
 			var statusTimeout;
 			$scope.showStatus = function (text, delay = 2000) {
@@ -61,38 +85,14 @@
 					timeout: 5000,
 					enableHighAccuracy: true
 				}).then(function (position) {
-					plugins.toast.showLongBottom(position);
 					console.log(position);
 					var latLng = new mapService.plugin
 						.LatLng(geoService.positionToLatLng(position));
 					mapService.setCenter(latLng);
 				}, function (error) {
-					plugins.toast.showLongBottom(error);
 					console.log(error);
 				});
 			};
-
-			$scope.tryCurrent = () => mapService.tryCurrent(10).then(function (result) {
-				plugins.toast.showLongBottom(result);
-				console.log(result);
-			}, function (error) {
-				plugins.toast.showLongBottom(error.error_message);
-				console.log(error);
-			});
-
-			$scope.gmapCurrent = () => mapService.current().then(function (result) {
-				plugins.toast.showLongBottom(result);
-				console.log(result);
-			}, function (error) {
-				plugins.toast.showLongBottom(error.error_message);
-				console.log(error);
-			});
-
-			$scope.hasMarker = () => !!$scope.markers.length;
-
-			$scope.hasMultiMurkers = () => $scope.markers.length > 1;
-
-			$scope.hasNewMarker = () => !!$scope.newMarker;
 
 			$scope.removeNewMarker = () => {
 				if (!$scope.newMarker)
@@ -123,10 +123,6 @@
 
 				});
 			};
-
-			$scope.infoCellClass = () => 'text-info blink';
-
-			$scope.add = () => $scope.newMarker && $scope.newMarker.getPosition(_add);
 
 			$scope.watch = function () {
 				if ($scope.watching || $scope.watchLock)
@@ -173,16 +169,6 @@
 			};
 
 			$scope.toggleTraffic = () => $scope.traffic(!$scope.traffic());
-
-			$scope.getBtnStatusClass = active => active ? 'item-primary' : 'text-info';
-
-			$scope.getGpsStatusIcon = () => {
-				// For sure if it's tracking.
-				geoService.track();
-				if (!$scope.watching)
-					return 'zmdi zmdi-gps';
-				return 'zmdi zmdi-gps-dot' + (geoService.online ? '' : ' blink text-warning');
-			};
 
 			$scope.addMarkerEvents = function (marker) {
 
@@ -240,7 +226,9 @@
 
 				// #region service init
 
-				mapService.init($scope.canvas);
+				mapService.init($scope.canvas,{
+					backgroundColor: $scope.appConfig.themeColor,
+				});
 				geoService.init();
 				// #endregion
 
@@ -248,9 +236,15 @@
 					.then(function () {
 
 						mapService.onsenFix();
-
+						// TODO: if maps current type is equal to requested type don't change it.
 						$scope.setType($scope.config.mapType || $scope.mapType.enum.satellite, true);
 						$scope.traffic($scope.config.traffic || false);
+						// If center option was set then set center of map to given center latLng.
+						var center = $scope.center || $scope.config.lastLocation;
+						if (center) {
+							console.log('set center on initiation to {lat}, {lng}'.formatWith(center));
+							mapService.setCenter(center);
+						}
 
 						mapService.onClick($scope.removeNewMarker);
 						mapService.onLongClick($scope.addMarker);
@@ -263,7 +257,6 @@
 	]);
 
 	function _add(latLng) {
-		console.log(latLng);
 		appSys.nav.pushPage('templates/Place/place-form.html', {
 			animation: "lift",
 			place: {

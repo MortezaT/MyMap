@@ -15,7 +15,7 @@
 					new svc.plugin.LatLng(35.70472646510231, 51.45291410386562);
 
 				_getOptions.defaults = _getOptions.defaults || {
-					backgroundColor: '#ffffff',
+					backgroundColor: '#000000',
 					mapType: svc.plugin.MapTypeId.HYBRID,
 					controls: {
 						compass: true,
@@ -156,6 +156,12 @@
 				})();
 
 				return deferred.promise;
+			};
+
+			svc.setTheme = (themeColor) => {
+				if (!svc.map)
+					return;
+				svc.map.setBackgroundColor(themeColor);
 			};
 
 			// #region Marker

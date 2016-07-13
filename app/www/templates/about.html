@@ -1,1 +1,22 @@
-<ons-page></ons-page>
+<ons-page>
+	<ons-toolbar>
+		<ons-toolbar-button
+			class="right"
+			ng-click="app.menu.toggleMenu()">
+			<ons-icon icon="ion-navicon"></ons-icon>
+		</ons-toolbar-button>
+		<div class="center">About App</div>
+	</ons-toolbar>
+
+	<div id="about-page">
+		<div id="about-desc">
+			<h1>My Map</h1>
+			<small>A simple location manager</small>
+			<p>
+				<strong>Author:</strong>
+				<a class="no-decoration" href="mailto:morteza.tourani@gmail.com">Morteza Tourani</a>
+
+			</p>
+		</div>
+	</div>
+</ons-page>

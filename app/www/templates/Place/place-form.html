@@ -37,12 +37,6 @@
 				</ons-row>
 			</ons-col>
 			<ons-col width="1em"></ons-col>
-			<!--
-			<ons-col width="3em" class="text-center" ng-click="showOnMap()">
-				<i class="zmdi-hc-2x zmdi zmdi-map"></i>
-			</ons-col>
-			-->
-			<ons-col width="1em"></ons-col>
 		</ons-list-item>
 
 		<ons-list-item modifier="nodivider">
@@ -97,10 +91,12 @@
 			</ons-col>
 			<ons-col width="2%"></ons-col>
 			<ons-col>
-				<div dir="auto" class="text-justified">{{ shadow.latLng.lat }}</div>
-			</ons-col>
-			<ons-col>
-				<div dir="auto" class="text-justified">{{ shadow.latLng.long }}</div>
+				<ons-row>
+					<div dir="auto" class="text-justified">Latitude {{ shadow.latLng.lat | number : 3 }}</div>
+				</ons-row>
+				<ons-row>
+					<div dir="auto" class="text-justified">Longitude {{ shadow.latLng.lng | number : 3 }}</div>
+				</ons-row>
 			</ons-col>
 			<ons-col width="1em"></ons-col>
 			<ons-col width="3em" class="text-center" ng-click="showOnMap()">

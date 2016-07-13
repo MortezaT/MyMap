@@ -28,6 +28,18 @@
 				</ons-col>
 			</ons-row>
 		</ons-list-item>
+		<ons-list-item modifier="nodivider"></ons-list-item>
+		<ons-list-item>
+			<ons-row>
+				<ons-col>Dark theme</ons-col>
+				<ons-col width="44px">
+					<ons-switch
+						ng-model="config.darkTheme"
+						ng-change="changeTheme()"
+					></ons-switch>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
 	</ons-list>
 
 </div>

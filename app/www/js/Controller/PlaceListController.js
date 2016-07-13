@@ -28,16 +28,8 @@
 				}
 			};
 
-			$scope.show = function (place) {
-				$scope.appSys.nav.pushPage('templates/Place/place-form.html', {
-					animation: "lift",
-					place: place,
-					action: appSys.config.actions.VIEW
-				});
-			};
-
 			$scope.open = function (place) {
-				$scope.appSys.nav.pushPage('templates/Place/place-form.html', {
+				appSys.nav.pushPage('templates/Place/place-form.html', {
 					animation: "lift",
 					place: place,
 					action: appSys.config.actions.VIEW

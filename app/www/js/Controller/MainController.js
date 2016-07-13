@@ -13,6 +13,7 @@
 
 			$localStorage.places = $localStorage.places || placeFeed;
 			$localStorage.mapConfig = $localStorage.mapConfig || {};
+			$localStorage.appConfig = $localStorage.appConfig || { darkTheme: false, darkThemeIndex: 5, themeColor: '#ffffff' };
 
 			$scope._placeTypes = [
 				{ icon: 'zmdi zmdi-hc-lg zmdi-home', name: 'Home' },
