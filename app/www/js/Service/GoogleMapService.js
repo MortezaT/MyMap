@@ -59,10 +59,11 @@
 				return deferred.promise;
 			};
 
-			svc.setCenter = function (latLng) {
+			svc.setCenter = function (latLng, duration = 3000) {
 				svc.map.animateCamera({
-					"target": latLng,
-					"zoom": 18
+					target: latLng,
+					zoom: 18,
+					duration: duration
 				});
 			};
 

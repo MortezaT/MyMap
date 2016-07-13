@@ -2,7 +2,7 @@
 	var app = angular.module(appName);
 
 	app.controller('MapCtrl', ['$scope', '$timeout', 'googleMapService', 'cordovaGeolocationService', '$localStorage',
-		function ($scope, $timeout, mapService, geoService, $localStorage) {
+		function ($scope, $timeout, mapService, geoService, $Storage) {
 
 			var mapType = {
 				open: () => {
@@ -41,11 +41,11 @@
 				}
 			};
 
-			$scope.config = $localStorage.mapConfig;
-			$scope.appConfig = $localStorage.appConfig;
+			$scope.config = $Storage.mapConfig;
+			$scope.appConfig = $Storage.appConfig;
+			$scope.myPlaces = $Storage.places;
+
 			$scope.markers = [];
-			var options = appSys.nav ? appSys.nav.topPage.pushedOptions : {};
-			$scope.center = options.center;
 
 			$scope.hasMarker = () => !!$scope.markers.length;
 
@@ -55,7 +55,12 @@
 
 			$scope.infoCellClass = () => 'text-info blink';
 
-			$scope.add = () => $scope.newMarker && $scope.newMarker.getPosition(_add);
+			$scope.add = () => {
+				if (!$scope.newMarker)
+					return;
+				$scope.newMarker.getPosition(_add);
+				$scope.removeNewMarker();
+			};
 
 			$scope.getBtnStatusClass = active => active ? 'item-primary' : 'text-info';
 
@@ -90,7 +95,7 @@
 						.LatLng(geoService.positionToLatLng(position));
 					mapService.setCenter(latLng);
 				}, function (error) {
-					console.log(error);
+					console.warn(error);
 				});
 			};
 
@@ -140,7 +145,7 @@
 					$scope.watchId = geoService.watch(
 						function change(position) {
 							console.info('Location changed');
-							mapService.setCenter(geoService.positionToLatLng(position));
+							mapService.setCenter(geoService.positionToLatLng(position), 300);
 						},
 						function (error) {
 							console.error(`Unable to watch due to ${error}`);
@@ -216,6 +221,49 @@
 					});
 			};
 
+			var baseUrl = 'images/places/';
+			var getPlaceType = place => ($scope._placeTypes.find(i => i.id === place.type));
+
+			$scope.showPlace = place => {
+				var args = {
+					position: place.latLng,
+					draggable: false,
+				};
+				var type = getPlaceType(place);
+				if (type)
+					args.icon = {
+						url: type.path
+					};
+				mapService.addMarker(args);
+			};
+
+			$scope.showMyPlaces = function () {
+				$scope.myPlaces.forEach(place => place.latLng && $scope.showPlace(place));
+			};
+
+			$scope.refreshMap = function () {
+
+				mapService.onsenFix();
+				mapService.map.clear();
+				// TODO: if maps current type is equal to requested type don't change it.
+				$scope.setType($scope.config.mapType || $scope.mapType.enum.satellite, true);
+				$scope.traffic($scope.config.traffic || false);
+				// If center option was set then set center of map to given center latLng.
+
+				$scope.showMyPlaces();
+
+				if ($Storage.center) {
+					console.info(`Center was set to `, $Storage.center);
+					mapService.setCenter($Storage.center);
+					delete $Storage.center;
+				} else if ($Storage.lastLocation)
+					mapService.setCenter($Storage.center);
+
+				mapService.onClick($scope.removeNewMarker);
+				mapService.onLongClick($scope.addMarker);
+				mapService.onMyLocationClick($scope.toggleWatch);
+			};
+
 			ons.ready(function () {
 				$scope.mapTypeDial = mapType.dial = document.getElementById('map-dial');
 				$scope.canvas = document.getElementById('map_canvas');
@@ -226,30 +274,13 @@
 
 				// #region service init
 
-				mapService.init($scope.canvas,{
+				mapService.init($scope.canvas, {
 					backgroundColor: $scope.appConfig.themeColor,
 				});
 				geoService.init();
 				// #endregion
 
-				mapService.waitTillReady()
-					.then(function () {
-
-						mapService.onsenFix();
-						// TODO: if maps current type is equal to requested type don't change it.
-						$scope.setType($scope.config.mapType || $scope.mapType.enum.satellite, true);
-						$scope.traffic($scope.config.traffic || false);
-						// If center option was set then set center of map to given center latLng.
-						var center = $scope.center || $scope.config.lastLocation;
-						if (center) {
-							console.log('set center on initiation to {lat}, {lng}'.formatWith(center));
-							mapService.setCenter(center);
-						}
-
-						mapService.onClick($scope.removeNewMarker);
-						mapService.onLongClick($scope.addMarker);
-						mapService.onMyLocationClick($scope.toggleWatch);
-					});
+				mapService.waitTillReady().then($scope.refreshMap);
 				// #endregion
 			});
 

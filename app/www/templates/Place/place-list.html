@@ -5,7 +5,7 @@
 			ng-click="appSys.menu.toggleMenu()">
 			<ons-icon icon="ion-navicon"></ons-icon>
 		</ons-toolbar-button>
-		<div class="center">Manage places</div>
+		<div class="center text-center">Manage places</div>
 	</ons-toolbar>
 
 	<h3>My places</h3>
@@ -21,7 +21,7 @@
 					<ons-input type="checkbox" ng-model="selectedItems[$index]"></ons-input>
 				</ons-col>
 				<ons-col width="15%" class="text-center">
-					<i class="{{ place.type.icon }}"></i>
+					<i class="zmdi-hc-lg {{ getIcon(place) }}"></i>
 				</ons-col>
 				<ons-col>
 					{{ place.title }}
@@ -43,10 +43,10 @@
 				<i class="zmdi zmdi-hc-lg zmdi-delete"></i>
 			</ons-col>
 			<ons-col width="1px" class="item-primary"></ons-col>
-			<ons-col width="44px" class="text-center"  ng-click="selectAll()" ng-hide="isAllSelected()">
+			<ons-col width="44px" class="text-center"  ng-click="selectAll()" ng-hide="allSelected()">
 				<i class="zmdi zmdi-hc-lg zmdi-select-all"></i>
 			</ons-col>
-			<ons-col width="44px" class="text-center"  ng-click="deselectAll()" ng-show="isAllSelected()">
+			<ons-col width="44px" class="text-center"  ng-click="deselectAll()" ng-show="allSelected()">
 				<i class="zmdi zmdi-hc-lg zmdi-close-circle-o"></i>
 			</ons-col>
 			<ons-col width="1px" class="item-primary"></ons-col>

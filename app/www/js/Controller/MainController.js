@@ -13,43 +13,37 @@
 
 			$localStorage.places = $localStorage.places || placeFeed;
 			$localStorage.mapConfig = $localStorage.mapConfig || {};
-			$localStorage.appConfig = $localStorage.appConfig || { darkTheme: false, darkThemeIndex: 5, themeColor: '#ffffff' };
+			$localStorage.appConfig = $localStorage.appConfig ||
+				{ darkTheme: false, darkThemeIndex: 5, themeColor: '#ffffff' };
 
 			$scope._placeTypes = [
-				{ icon: 'zmdi zmdi-hc-lg zmdi-home', name: 'Home' },
-
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-activity', name: 'Activity' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-airport', name: 'Airport' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-atm', name: 'Atm' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-bar', name: 'Bar' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-cafe', name: 'Cafe' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-car-wash', name: 'Car Wash' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-convenience-store', name: 'Convenience Store' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-dining', name: 'Dining' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-drink', name: 'Drink' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-florist', name: 'Florist' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-gas-station', name: 'Gas Station' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-grocery-store', name: 'Grocery Store' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-hospital', name: 'Hospital' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-hotel', name: 'Hotel' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-laundry-service', name: 'Laundry Service' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-library', name: 'Library' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-mall', name: 'Mall' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-movies', name: 'Movies' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-offer', name: 'Offer' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-parking', name: 'Parking' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-pharmacy', name: 'Pharmacy' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-phone', name: 'Phone' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-pizza', name: 'Pizza' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-activity', name: 'Activity' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-post-office', name: 'Post Office' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-printshop', name: 'Printshop' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-see', name: 'See' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-shipping', name: 'Shipping' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-store', name: 'Store' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-taxi', name: 'Taxi' },
-				{ icon: 'zmdi zmdi-hc-lg zmdi-local-wc', name: 'Wc' },
+				{ id: 1, icon: 'zmdi zmdi-local-airport', name: 'Airport', path: 'https://www.dropbox.com/s/ije0htu28499ydd/airport.png?dl=1' },
+				{ id: 2, icon: 'zmdi zmdi-money', name: 'Bank/ATM', path: 'https://www.dropbox.com/s/q8uzjhge9pts4x8/bank.png?dl=1' },
+				{ id: 3, icon: 'zmdi zmdi-bus', name: 'Transportaion', path: 'https://www.dropbox.com/s/d0bfwmlt0xcstd5/transportaion_1.png?dl=1' },
+				{ id: 4, icon: 'zmdi zmdi-pizza', name: 'Food', path: 'https://www.dropbox.com/s/4py224lahbr8wsu/food_6.png?dl=1' },
+				{ id: 5, icon: 'zmdi zmdi-home', name: 'House', path: 'https://www.dropbox.com/s/q4d2ju8xkw0cfoe/house_1.png?dl=1' },
+				{ id: 6, icon: 'zmdi zmdi-info', name: 'Info', path: 'https://www.dropbox.com/s/wcqmd7jou2t4eaz/information.png?dl=1' },
+				{ id: 7, icon: 'zmdi zmdi-local-library', name: 'Library', path:'https://www.dropbox.com/s/la9vc3c7ydzdvaq/library.png?dl=1' },
+				{ id: 8, icon: 'ion-university', name: 'University/School', path:'https://www.dropbox.com/s/yie44mh071sld2a/university.png?dl=1' },
+				{ id: 9, icon: 'zmdi zmdi-hospital', name: 'Medical', path: 'https://www.dropbox.com/s/yyenpgwo0ny8asu/medical_4.png?dl=1' },
+				{ id: 10, icon: 'zmdi zmdi-store', name: 'Store', path: 'https://www.dropbox.com/s/7tbj1qs357i6rzq/store_1.png?dl=1' },
+				{ id: 11, icon: 'zmdi zmdi-case', name: 'Work', path: 'https://www.dropbox.com/s/p3f33cpfrddgrsb/work_1.png?dl=1' },
+				{ id: 12, icon: 'zmdi zmdi-local-hotel', name: 'Living', path:'https://www.dropbox.com/s/9s5ga4z7aatr2qk/house_2.png?dl=1' },
 			];
+			/*$scope._placeTypes = [
+				{ id: 1, icon: 'zmdi zmdi-local-airport', name: 'Airport', path: 'airport.png' },
+				{ id: 2, icon: 'zmdi zmdi-money', name: 'Bank/ATM', path: 'bank.png' },
+				{ id: 3, icon: 'zmdi zmdi-bus', name: 'Transportaion', path: 'transportation_1.png' },
+				{ id: 4, icon: 'zmdi zmdi-pizza', name: 'Food', path: 'food_6.png' },
+				{ id: 5, icon: 'zmdi zmdi-home', name: 'House', path: 'house_1.png' },
+				{ id: 6, icon: 'zmdi zmdi-info', name: 'Info', path: 'information.png' },
+				{ id: 7, icon: 'zmdi zmdi-local-library', name: 'Library', path:'library.png' },
+				{ id: 8, icon: 'ion-university', name: 'University/School', path:'university.png' },
+				{ id: 9, icon: 'zmdi zmdi-hospital', name: 'Medical', path: 'medical_4.png' },
+				{ id: 10, icon: 'zmdi zmdi-store', name: 'Store', path: 'store_1.png' },
+				{ id: 11, icon: 'zmdi zmdi-case', name: 'Work', path: 'work_1.png' },
+				{ id: 12, icon: 'zmdi zmdi-local-hotel', name: 'Living', path:'house_2.png' },
+			];*/
 
 		}
 	]);

@@ -3,7 +3,7 @@
 		<div class="left">
 			<ons-back-button>Back</ons-back-button>
 		</div>
-		<div class="center"><i class="{{ shadow.type.icon }}"></i> {{ shadow.title }}</div>
+		<div class="center"><i class="{{ type.dataItem.icon }}"></i> {{ shadow.title }}</div>
 	</ons-toolbar>
 
 	<ons-list modifier="inset noborder" ng-show="canEdit()">
@@ -13,9 +13,9 @@
 		<ons-list-item modifier="nodivider">
 			<ons-row>
 				<ons-col width="20%" style="position: relative;">
-					<i class="zmdi-hc-2x zmdi-hc-border {{shadow.type.icon || defaultIcon}}"></i>
+					<i class="zmdi-hc-2x zmdi-hc-border {{ type.dataItem.icon || defaultIcon }}"></i>
 					<!-- <ons-icon icon="fa-caret-down" size="lg"></ons-icon> -->
-					<select class="fill-parent glass" name="dropdown-test" id="dropdown-test" ng-model="shadow.type" ng-options="type2.name for type2 in type.items"></select>
+					<select class="fill-parent glass" ng-model="type.dataItem" ng-options="item.name for item in type.items" ng-change="changeIcon()"></select>
 				</ons-col>
 				<ons-col>
 					<ons-input ng-model="shadow.title" placeholder="Title" modifier="material" float></ons-input>
@@ -65,7 +65,7 @@
 
 		<ons-list-item modifier="nodivider">
 			<ons-col width="44px" class="text-center">
-				<i class="zmdi-hc-2x {{shadow.type.icon || defaultIcon}}"></i>
+				<i class="zmdi-hc-2x {{ type.dataItem.icon || defaultIcon }}"></i>
 			</ons-col>
 			<ons-col width="2%"></ons-col>
 			<ons-col>

@@ -6,9 +6,7 @@
 	};
 
 	app.controller('PlaceFormCtrl', ['$scope', '$element', '$localStorage', 'googleMapService',
-		function ($scope, $element, $localStorage, mapService) {
-			$scope.$storage = $localStorage;
-
+		function ($scope, $element, $Storage, mapService) {
 			var options = appSys.nav.topPage.pushedOptions;
 			var actions = appSys.config.actions;
 
@@ -19,19 +17,22 @@
 				items: $scope._placeTypes,
 			};
 
-			$scope.type = {
-				items: $scope._placeTypes,
-			};
-
 			$scope.defaultIcon = 'zmdi zmdi-pin';
 
 			$scope.action = options.action;
 
 			$scope.place = options.place;
 
+			$scope.type = {
+				items: $scope._placeTypes,
+				dataItem: $scope._placeTypes.find(i => i.id === $scope.place.type)
+			};
+
 			$scope.shadow = ($scope.action === actions.NEW) ?
 				Object.assign({}, defaultPlace, $scope.place) :
 				angular.copy($scope.place);
+
+			$scope.changeIcon = () => $scope.shadow.type = $scope.type.dataItem.id;
 
 			$scope.canEdit = () => $scope.action !== actions.VIEW;
 
@@ -54,17 +55,20 @@
 			$scope.save = () => {
 				var cloned = angular.copy($scope.shadow);
 				if ($scope.action === actions.NEW)
-					$scope.$storage.places.push(cloned);
+					$Storage.places.push(cloned);
 
 				$scope.action = actions.VIEW;
 				Object.assign($scope.place, cloned);
 			};
 
 			$scope.showOnMap = () => {
-				appSys.nav.pushPage('templates/map.html', {
-					animation: "slide",
-					place: $scope.place.latLng,
+				$Storage.center = $scope.place.latLng;
+				plugins.toast.showLongCenter(`${$scope.place.title} set as center open map page to see it.`);
+				/*
+				appSys.nav.resetToPage('templates/map.html', {
+					animation: "slide"
 				});
+				*/
 			};
 		}
 	]);
