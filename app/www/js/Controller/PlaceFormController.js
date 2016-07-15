@@ -63,12 +63,7 @@
 
 			$scope.showOnMap = () => {
 				$Storage.center = $scope.place.latLng;
-				plugins.toast.showLongCenter(`${$scope.place.title} set as center open map page to see it.`);
-				/*
-				appSys.nav.resetToPage('templates/map.html', {
-					animation: "slide"
-				});
-				*/
+				appSys.menu.navigateTo($scope._menuRoutes.map);
 			};
 		}
 	]);

@@ -8,13 +8,16 @@
 		<div class="center text-center">Manage places</div>
 	</ons-toolbar>
 
-	<h3>My places</h3>
+	<h3>&nbsp; My places</h3>
 	<ons-list>
 		<ons-list-item
 			ng-repeat="place in myPlaces"
 			ng-click="pressed(place, $index)"
 			on-long-press="longPressed($index)"
 		>
+			<ons-row ng-if="!myPlaces.length">
+				<strong>There is no places to show!</strong>
+			</ons-row>
 			<ons-row>
 				<ons-col width="4px"></ons-col>
 				<ons-col width="44px" class="text-center" ng-show="isManageMode()">

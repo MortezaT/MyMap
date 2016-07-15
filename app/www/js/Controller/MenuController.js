@@ -6,30 +6,22 @@
 			var app = $scope.app;
 			$scope.config = $localStorage.appConfig;
 
-			$scope.menuRoutes = [{
-				title: 'Map',
-				icon: 'ion-map fa-lg',
-				route: 'templates/map.html'
-			}, {
-				title: 'My Locations',
-				icon: 'ion-location fa-lg',
-				route: 'templates/Place/place-list.html'
-			}, {
-				title: 'About',
-				icon: 'ion-information-circled fa-lg',
-				route: 'templates/about.html'
-			}, ];
+			$scope.menuRoutes = $scope._menuRoutes;
 
-			$scope.navigateTo = function (page) {
+			appSys.menu.navigateTo = function (page) {
 				appSys.menu.closeMenu();
-				if (!page.route || $scope.appSys.menu.currentPage === page)
+				console.info(`Prepare navigate to \t "${page.title}"`);
+				var current = $scope.appSys.menu.currentPage;
+				if (!page.route || (!current && page.route === $scope.appSys.menu._currentPageUrl) || current === page)
 					return;
-				console.info('Navigate to page:\t "{title}" on\t "{route}"'.formatWith(page));
+				console.info(`Navigate to \t "${page.title}"`);
 
 				appSys.menu.currentPage = page;
 
 				appSys.nav.resetToPage(page.route);
 			};
+
+			$scope.navigateTo = appSys.menu.navigateTo;
 
 			// dark theme index
 			$scope.changeTheme = () => {

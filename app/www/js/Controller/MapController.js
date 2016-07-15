@@ -99,6 +99,10 @@
 				});
 			};
 
+			$scope.navigate = () => {
+				appSys.nav.pushPage('templates/navigate.html');
+			};
+
 			$scope.removeNewMarker = () => {
 				if (!$scope.newMarker)
 					return;
@@ -130,30 +134,39 @@
 			};
 
 			$scope.watch = function () {
+				// TODO: Location watch and center should stop on map drag
 				if ($scope.watching || $scope.watchLock)
 					return $scope.watchId;
 				console.info('Start watching');
 				mapService.current();
 				$scope.watchLock = true;
 				return geoService.findMyLocation({
-					timeout: 5000,
-					enableHighAccuracy: true
-				}).then(position => {
-					$scope.watching = true;
-					$scope.watchLock = false;
-					mapService.setCenter(geoService.positionToLatLng(position));
-					$scope.watchId = geoService.watch(
-						function change(position) {
-							console.info('Location changed');
-							mapService.setCenter(geoService.positionToLatLng(position), 300);
+						timeout: 5000,
+						enableHighAccuracy: true
+					})
+					.then(position => {
+						$scope.watching = true;
+						$scope.watchLock = false;
+						mapService.getCameraPosition().then(camera => {
+							var args = {};
+							if (camera.zoom < 18 || camera.zoom > 20)
+								args.zoom = 18;
+							mapService.setCenter(geoService.positionToLatLng(position), args);
+						});
+					})
+					.then(() => $scope.watchId = geoService.watch(
+						position => {
+							var currentLocation = geoService.positionToLatLng(position);
+							console.info('Location changed to\t', currentLocation);
+							$scope.lastLocation = currentLocation;
+							mapService.setCenter(currentLocation, 1000);
 						},
-						function (error) {
-							console.error(`Unable to watch due to ${error}`);
+						error => {
+							console.error('Unable to watch due to error\t', error);
 							$scope.unWatch();
 							$scope.watchLock = false;
 						}
-					);
-				});
+					));
 			};
 
 			$scope.unWatch = function () {
@@ -221,7 +234,6 @@
 					});
 			};
 
-			var baseUrl = 'images/places/';
 			var getPlaceType = place => ($scope._placeTypes.find(i => i.id === place.type));
 
 			$scope.showPlace = place => {
@@ -234,14 +246,24 @@
 					args.icon = {
 						url: type.path
 					};
-				mapService.addMarker(args);
+				mapService.addMarker(args)
+					.then(marker => marker.showInfoWindow());
 			};
 
 			$scope.showMyPlaces = function () {
 				$scope.myPlaces.forEach(place => place.latLng && $scope.showPlace(place));
 			};
 
+			$scope.addMapEvents = () => {
+				mapService.onClick($scope.removeNewMarker);
+				mapService.onLongClick($scope.addMarker);
+				mapService.onMyLocationClick($scope.toggleWatch);
+			};
+
 			$scope.refreshMap = function () {
+
+				var ShamsipourUniversity =
+					new mapService.plugin.LatLng(35.70472646510231, 51.45291410386562);
 
 				mapService.onsenFix();
 				mapService.map.clear();
@@ -257,11 +279,11 @@
 					mapService.setCenter($Storage.center);
 					delete $Storage.center;
 				} else if ($Storage.lastLocation)
-					mapService.setCenter($Storage.center);
+					mapService.setCenter($Storage.lastLocation);
+				else
+					mapService.setCenter(ShamsipourUniversity);
 
-				mapService.onClick($scope.removeNewMarker);
-				mapService.onLongClick($scope.addMarker);
-				mapService.onMyLocationClick($scope.toggleWatch);
+				$scope.addMapEvents();
 			};
 
 			ons.ready(function () {

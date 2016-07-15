@@ -1,0 +1,79 @@
+<ons-page ng-controller="NavigateCtrl">
+
+	<ons-toolbar>
+		<div class="left">
+			<ons-back-button>Back</ons-back-button>
+		</div>
+		<div class="center">Navigation</div>
+	</ons-toolbar>
+	<ons-list>
+		<ons-list-header><strong>Navigation</strong></ons-list-header>
+		<ons-list-item modifier="noborder">
+			<ons-row>
+				<ons-col width="20%">From</ons-col>
+				<ons-col>
+					<ons-input
+						placeholder="From"
+						ng-model="from"
+						ng-click="setFocusOn('from')"
+						ng-change="filter()"
+					></ons-input>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		<ons-list-item modifier="noborder">
+			<ons-row>
+				<ons-col width="20%">To</ons-col>
+				<ons-col>
+					<ons-input
+						placeholder="To"
+						ng-model="to"
+						ng-click="setFocusOn('to')"
+						ng-change="filter()"
+					></ons-input>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		<ons-list-item modifier="noborder" ng-show="validFromTo()">
+			<ons-row>
+				<ons-col>Direct distance(km)</ons-col>
+				<ons-col>{{ distance | number }}</ons-col>
+			</ons-row>
+		</ons-list-item>
+	</ons-list>
+
+	<ons-list ng-show="showList()">
+		<ons-list-item
+			ng-repeat="place in myPlaces | filter: q as result"
+			ng-click="select(place)"
+			>
+			<ons-row>
+				<ons-col width="4px"></ons-col>
+				<ons-col width="15%" class="text-center">
+					<i class="zmdi-hc-lg {{ getIcon(place) }}"></i>
+				</ons-col>
+				<ons-col>
+					{{ place.title }},
+					<small class="text-overflow-elipsis overflow-hidden">{{ place.address }}</small>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		<ons-list-item ng-if="!result.length">
+			<strong>&nbsp; No results found... !</strong>
+		</ons-list-item>
+	</ons-list>
+
+	<ons-bottom-toolbar>
+		<ons-row class="bottom-bar__line-height">
+			<ons-col width="1%"></ons-col>
+			<ons-col>
+				<div class="text-warning blink" ng-show="sameness()">
+					Source and destination are the same.
+				</div>
+			</ons-col>
+			<ons-col class="item-primary-click text-center" width="20%" ng-show="canNavigate()" ng-click="navigate()">
+				<i class="ion-navigate zmdi-hc-lg"></i>
+			</ons-col>
+		</ons-row>
+	</ons-bottom-toolbar>
+</ons-page>

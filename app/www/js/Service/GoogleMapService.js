@@ -10,9 +10,8 @@
 			};
 
 			function _getOptions(options) {
-				// TODO: Map options must be memorized upon to user change.
-				var ShamsipourUniversity =
-					new svc.plugin.LatLng(35.70472646510231, 51.45291410386562);
+
+				var latLng = new svc.plugin.LatLng(0, 0);
 
 				_getOptions.defaults = _getOptions.defaults || {
 					backgroundColor: '#000000',
@@ -30,7 +29,7 @@
 						zoom: true
 					},
 					camera: {
-						latLng: ShamsipourUniversity,
+						latLng: latLng,
 						tilt: 30,
 						zoom: 18,
 						bearing: 300
@@ -59,12 +58,12 @@
 				return deferred.promise;
 			};
 
-			svc.setCenter = function (latLng, duration = 3000) {
-				svc.map.animateCamera({
+			svc.setCenter = function (latLng, args) {
+				args = Object.assign({}, {
 					target: latLng,
-					zoom: 18,
-					duration: duration
-				});
+					duration: 3000
+				}, args);
+				svc.map.animateCamera(args);
 			};
 
 			svc.current = function (accurate = true) {
@@ -124,6 +123,56 @@
 			svc.track.stop = function () {
 				if (svc.track.tracking)
 					svc.track.tracking.reject();
+			};
+
+			// #endregion
+
+			// #region Distance
+
+			svc.distance = (latLng1, latLng2) => {
+				var earthRadius = 6371;
+				var phi1 = latLng1.lat.degToRad(),
+					phi2 = latLng2.lat.degToRad(),
+					deltaPhi = phi2 - phi1;
+
+				var lambda1 = latLng1.lng.degToRad(),
+					lambda2 = latLng2.lng.degToRad(),
+					deltaLambda = lambda2 - lambda1;
+				var a = Math.pow(Math.sin(deltaPhi / 2), 2) +
+					Math.cos(phi1) * Math.cos(phi2) * Math.pow(Math.sin(deltaLambda / 2), 2);
+				var angularDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+				var distance = angularDistance * earthRadius;
+
+				return distance;
+
+				// NOTE: Check this implementation which seems to be faster.
+				/*
+					function distance(lat1, lon1, lat2, lon2) {
+					  var p = 0.017453292519943295;    // Math.PI / 180
+					  var c = Math.cos;
+					  var a = 0.5 - c((lat2 - lat1) * p)/2 +
+					          c(lat1 * p) * c(lat2 * p) *
+					          (1 - c((lon2 - lon1) * p))/2;
+
+					  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+					}
+				*/
+
+			};
+
+			// #endregion
+
+			// #region Navigate
+
+			svc.navigate = (from, to) => {
+				if (!(from && to))
+					return;
+				from = new svc.plugin.LatLng(from.lat, from.lng);
+				to = new svc.plugin.LatLng(to.lat, to.lng);
+				svc.plugin.external.launchNavigation({
+					from: from,
+					to: to,
+				});
 			};
 
 			// #endregion
@@ -197,6 +246,12 @@
 			svc.getMarkerLatLng = function (marker) {
 				var deferred = $q.defer();
 				marker.getPosition(latLng => deferred.resolve(latLng));
+				return deferred.promise;
+			};
+
+			svc.getCameraPosition = () => {
+				var deferred = $q.defer();
+				svc.map.getCameraPosition(camera => deferred.resolve(camera));
 				return deferred.promise;
 			};
 
