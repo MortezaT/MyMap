@@ -149,17 +149,26 @@
 						$scope.watchLock = false;
 						mapService.getCameraPosition().then(camera => {
 							var args = {};
-							if (camera.zoom < 18 || camera.zoom > 20)
-								args.zoom = 18;
+							console.log(`Camera zoom: ${camera.zoom}`);
+							/*
+								if (camera.zoom < 18 || camera.zoom > 20)
+									args.zoom = 18;
+							*/
 							mapService.setCenter(geoService.positionToLatLng(position), args);
 						});
 					})
 					.then(() => $scope.watchId = geoService.watch(
 						position => {
+							if ($scope.moving)
+								return;
+
+							var duration = 1000;
+							$scope.moving = true;
 							var currentLocation = geoService.positionToLatLng(position);
 							console.info('Location changed to\t', currentLocation);
 							$scope.lastLocation = currentLocation;
-							mapService.setCenter(currentLocation, 1000);
+							mapService.setCenter(currentLocation, duration);
+							setTimeout(() => $scope.moving = false, duration);
 						},
 						error => {
 							console.error('Unable to watch due to error\t', error);
