@@ -3,6 +3,7 @@
 
 	app.factory('googleMapService', ['$q', '$document', '$timeout',
 		function ($q, $document, $timeout) {
+
 			var svc = {
 				isMapReady: false,
 				initiationLock: false,
@@ -43,6 +44,7 @@
 
 			// returns deferred which will resolve when map is ready.
 			svc.waitTillReady = function () {
+
 				if (svc.isMapReady)
 					return $q.resolve();
 				if (!svc.initiationLock)
@@ -59,6 +61,7 @@
 			};
 
 			svc.setCenter = function (latLng, args) {
+
 				args = Object.assign({}, {
 					target: latLng,
 					duration: 3000
@@ -67,6 +70,7 @@
 			};
 
 			svc.current = function (accurate = true) {
+
 				if (this.deferred)
 					return this.deferred.promise;
 				console.info('Get current location');
@@ -86,6 +90,7 @@
 			// #region Track
 			// track just checks if current location is available. and changes check period against availablity.
 			svc.track = function () {
+
 				var tracker = svc.track;
 				if (tracker.tracking)
 					return;
@@ -121,6 +126,7 @@
 			};
 
 			svc.track.stop = function () {
+
 				if (svc.track.tracking)
 					svc.track.tracking.reject();
 			};
@@ -130,6 +136,7 @@
 			// #region Distance
 
 			svc.distance = (latLng1, latLng2) => {
+
 				var earthRadius = 6371;
 				var phi1 = latLng1.lat.degToRad(),
 					phi2 = latLng2.lat.degToRad(),
@@ -157,7 +164,6 @@
 					  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 					}
 				*/
-
 			};
 
 			// #endregion
@@ -165,6 +171,7 @@
 			// #region Navigate
 
 			svc.navigate = (from, to) => {
+
 				if (!(from && to))
 					return;
 				from = new svc.plugin.LatLng(from.lat, from.lng);
@@ -178,6 +185,7 @@
 			// #endregion
 
 			svc.tryCurrent = function (retries = 3, accurate = true) {
+
 				var deferred = $q.defer();
 				var resolved = false;
 				var retry = true;
@@ -209,6 +217,7 @@
 			};
 
 			svc.setTheme = (themeColor) => {
+
 				if (!svc.map)
 					return;
 				svc.map.setBackgroundColor(themeColor);
@@ -217,6 +226,7 @@
 			// #region Marker
 
 			svc.addMarker = function (options) {
+
 				var deferred = $q.defer();
 				svc.map
 					.addMarker(options, function (marker) {
@@ -227,6 +237,7 @@
 			};
 
 			svc.addMarkerAll = function (optionsList) {
+
 				var deferred = $q.defer();
 				var markerList = [];
 
@@ -244,18 +255,21 @@
 			};
 
 			svc.getMarkerLatLng = function (marker) {
+
 				var deferred = $q.defer();
 				marker.getPosition(latLng => deferred.resolve(latLng));
 				return deferred.promise;
 			};
 
 			svc.getCameraPosition = () => {
+
 				var deferred = $q.defer();
 				svc.map.getCameraPosition(camera => deferred.resolve(camera));
 				return deferred.promise;
 			};
 
 			svc.checkMarkerInfoVisible = marker => {
+
 				var deferred = $q.defer();
 				marker.isInfoWindowShown(isVisible => {
 					console.info(`info visibility: ` + (isVisible ? 'visible' : 'hidden'));
@@ -265,6 +279,7 @@
 			};
 
 			svc.showMarkerInfo = marker => {
+
 				if (marker.get('title'))
 					marker.showInfoWindow();
 			};
@@ -277,6 +292,7 @@
 			 *
 			 */
 			svc.geocode = function (request) {
+
 				var deferred = $q.defer();
 				svc.plugin.Geocoder.geocode(request, function (result) {
 					return (result.length) ?
@@ -287,6 +303,7 @@
 			};
 
 			svc.getAddress = function (latLng, asString) {
+
 				var request = {
 					position: latLng,
 				};
@@ -366,6 +383,7 @@
 			// #endregion
 
 			svc.onsenFix = function () {
+
 				// OnsenUI Fix
 				angular.element(document.querySelectorAll('.page__background'))
 					.css('background-color', 'rgba(0,0,0,0)');
@@ -385,6 +403,7 @@
 			// #region Map initiation
 
 			svc.init = function (div, options, freshMap = false) {
+
 				console.info('Initializing google map service...');
 				if (svc.initiationLock)
 					return;

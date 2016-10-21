@@ -6,10 +6,12 @@
 
 			var mapType = {
 				open: () => {
+
 					mapType.dial.showItems();
 					mapService.map.setClickable(!(mapType.isOpen = true));
 				},
 				close: () => {
+
 					mapType.dial.hideItems();
 					mapService.map.setClickable(!(mapType.isOpen = false));
 				},
@@ -56,6 +58,7 @@
 			$scope.infoCellClass = () => 'text-info blink';
 
 			$scope.add = () => {
+
 				if (!$scope.newMarker)
 					return;
 				$scope.newMarker.getPosition(_add);
@@ -65,6 +68,7 @@
 			$scope.getBtnStatusClass = active => active ? 'item-primary' : 'text-info';
 
 			$scope.getGpsStatusIcon = () => {
+
 				// For sure if it's tracking.
 				geoService.track();
 				if (!$scope.watching)
@@ -74,6 +78,7 @@
 
 			var statusTimeout;
 			$scope.showStatus = function (text, delay = 2000) {
+
 				$scope.status = text;
 				if (statusTimeout)
 					$timeout.cancel(statusTimeout);
@@ -84,6 +89,7 @@
 			};
 
 			$scope.current = () => {
+
 				console.log('Get current location from geoService...');
 				geoService.current({
 					maximumAge: 3000,
@@ -99,11 +105,10 @@
 				});
 			};
 
-			$scope.navigate = () => {
-				appSys.nav.pushPage('templates/navigate.html');
-			};
+			$scope.navigate = () => appSys.nav.pushPage('templates/navigate.html');
 
 			$scope.removeNewMarker = () => {
+
 				if (!$scope.newMarker)
 					return;
 				$scope.newMarker.remove();
@@ -113,6 +118,7 @@
 			};
 
 			$scope.setType = function (type, override = false) {
+
 				$scope.mapType.close();
 
 				if ($scope.config.mapType === type && !override)
@@ -134,6 +140,7 @@
 			};
 
 			$scope.watch = function () {
+
 				// TODO: Location watch and center should stop on map drag
 				if ($scope.watching || $scope.watchLock)
 					return $scope.watchId;
@@ -150,10 +157,10 @@
 						mapService.getCameraPosition().then(camera => {
 							var args = {};
 							console.log(`Camera zoom: ${camera.zoom}`);
-							/*
-								if (camera.zoom < 18 || camera.zoom > 20)
-									args.zoom = 18;
-							*/
+
+							if (camera.zoom < 18)
+								args.zoom = 18;
+
 							mapService.setCenter(geoService.positionToLatLng(position), args);
 						});
 					})
@@ -179,6 +186,7 @@
 			};
 
 			$scope.unWatch = function () {
+
 				console.info('Stop watching');
 				geoService.clear($scope.watchId);
 				$scope.watchId = null;
@@ -190,6 +198,7 @@
 			$scope.toggleWatch = () => $scope.watching ? $scope.unWatch() : $scope.watch();
 
 			$scope.traffic = function (stat) {
+
 				if (stat === undefined)
 					return $scope.config.traffic;
 				return (mapService.map.setTrafficEnabled($scope.config.traffic = stat));
@@ -227,6 +236,7 @@
 			};
 
 			$scope.addMarker = function (latLng) {
+
 				// Adds a marker if not exist.
 				if ($scope.newMarker)
 					$scope.newMarker.remove();
@@ -246,6 +256,7 @@
 			var getPlaceType = place => ($scope._placeTypes.find(i => i.id === place.type));
 
 			$scope.showPlace = place => {
+
 				var args = {
 					position: place.latLng,
 					draggable: false,
@@ -259,11 +270,10 @@
 					.then(marker => marker.showInfoWindow());
 			};
 
-			$scope.showMyPlaces = function () {
-				$scope.myPlaces.forEach(place => place.latLng && $scope.showPlace(place));
-			};
+			$scope.showMyPlaces = $scope.myPlaces.forEach(place => place.latLng && $scope.showPlace(place));
 
 			$scope.addMapEvents = () => {
+
 				mapService.onClick($scope.removeNewMarker);
 				mapService.onLongClick($scope.addMarker);
 				mapService.onMyLocationClick($scope.toggleWatch);
@@ -296,6 +306,7 @@
 			};
 
 			ons.ready(function () {
+
 				$scope.mapTypeDial = mapType.dial = document.getElementById('map-dial');
 				$scope.canvas = document.getElementById('map_canvas');
 
@@ -318,7 +329,10 @@
 		}
 	]);
 
+	// #region Helpers
+
 	function _add(latLng) {
+
 		appSys.nav.pushPage('templates/Place/place-form.html', {
 			animation: "lift",
 			place: {
@@ -327,4 +341,7 @@
 			action: appSys.config.actions.NEW
 		});
 	}
+
+	// #endregion
+
 })();
